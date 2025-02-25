@@ -67,11 +67,11 @@ public class User {
         this.password = password;
     }
 
-    public List<RpgStory> getRpgStories() {
+    public List<RpgStory> getStories() {
          return stories; 
         }
         
-    public void setRpgStories(List<RpgStory> stories) {
+    public void setStories(List<RpgStory> stories) {
          this.stories = stories; 
         }
 
@@ -98,13 +98,5 @@ public class User {
         } else if (!id.equals(other.id))
             return false;
         return true;
-    }
-
-    public List<RpgStory> getStories() {
-        return stories;
-    }
-
-    public void setStories(List<RpgStory> stories) {
-        this.stories = stories;
     }
 }
