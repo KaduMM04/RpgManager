@@ -1,11 +1,14 @@
 package com.entities;
 
+import java.util.List;
 import java.util.UUID;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -19,6 +22,11 @@ public class User {
     private String name;
     private String email;
     private String password;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RpgStory> stories;
+
+    public User() {}
 
     public User(UUID id, String name, String email, String password) {
         this.id = id;
@@ -59,6 +67,14 @@ public class User {
         this.password = password;
     }
 
+    public List<RpgStory> getRpgStories() {
+         return stories; 
+        }
+        
+    public void setRpgStories(List<RpgStory> stories) {
+         this.stories = stories; 
+        }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -82,5 +98,13 @@ public class User {
         } else if (!id.equals(other.id))
             return false;
         return true;
+    }
+
+    public List<RpgStory> getStories() {
+        return stories;
+    }
+
+    public void setStories(List<RpgStory> stories) {
+        this.stories = stories;
     }
 }
