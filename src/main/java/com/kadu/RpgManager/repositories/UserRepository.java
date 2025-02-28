@@ -8,5 +8,5 @@ import  com.kadu.RpgManager.entities.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
-    
+     boolean existsById(UUID id);
 }
