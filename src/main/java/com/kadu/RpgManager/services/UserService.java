@@ -3,10 +3,12 @@ package com.kadu.RpgManager.services;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.kadu.RpgManager.entities.User;
+import com.kadu.RpgManager.dtos.UserDTO;
 import com.kadu.RpgManager.repositories.UserRepository;
 
 @Service
@@ -19,16 +21,23 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDTO> getAllUsers() {
+        return userRepository.findAll().stream()
+            .map(this::convertToDTO)
+            .collect(Collectors.toList());
     }
 
-    public User getUserById(UUID id) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isPresent()) {
-            return optionalUser.get();
-        } 
-         throw new RuntimeException("User not found" + id);
+    public UserDTO getUserByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("User with email not found" + email));
+
+            return convertToDTO(user);
+    }
+
+    public UserDTO getUserById(UUID id) {
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("User not found "));
+        return convertToDTO(user);
     }
 
     public void deleteUserById(UUID id) {
@@ -38,14 +47,22 @@ public class UserService {
             userRepository.delete(user);
     }
 
-    public User updateUser(UUID id, User userData) {
+    public UserDTO updateUser(UUID id, UserDTO dto) {
         User existingUser = userRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
 
-            existingUser.setName(userData.getName());
-            existingUser.setEmail(userData.getEmail());
-            existingUser.setPassword(userData.getPassword());
-    
-            return userRepository.save(existingUser);
+            existingUser.setName(dto.getName());
+            existingUser.setEmail(dto.getEmail());
+            existingUser.setPassword(dto.getPassword());
+
+            User updatedUser = userRepository.save(existingUser);
+            return convertToDTO(updatedUser);
     }
+
+    public UserDTO convertToDTO(User user) {
+	    if (user == null) {
+	        throw new IllegalArgumentException("User cannot be null");
+	    }
+	    return new UserDTO(user.getId(), user.getName(), user.getEmail(), user.getPassword());
+	}
 }

@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -13,13 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.kadu.RpgManager.services.UserService;
-
+import com.kadu.RpgManager.dtos.UserDTO;
 import com.kadu.RpgManager.entities.User;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -31,43 +31,38 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        try {
-            user = userService.saveUser(user);
-            return ResponseEntity.ok().body(user);
-        } catch(RuntimeException e) {
-            return ResponseEntity.badRequest().body(null);
-        }
+    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
+        User user = userService.saveUser(new User(userDTO.getName(), userDTO.getEmail(), userDTO.getPassword()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.convertToDTO(user));
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> findAll() {
-       List<User> userList = userService.getAllUsers();
-       return ResponseEntity.ok().body(userList);
+    public ResponseEntity<List<UserDTO>> findAll() {
+       List<UserDTO> userDtosList = userService.getAllUsers();
+       return ResponseEntity.ok().body(userDtosList);
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<User> findById(@PathVariable UUID id) {
-        User user = userService.getUserById(id);
-        if (user == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok().body(user);
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDTO> getUser(@PathVariable UUID id) {
+        UserDTO userDTO = userService.getUserById(id);
+        return ResponseEntity.ok(userDTO);
     }
 
-    @PutMapping(value = "/{id}")
-	public ResponseEntity<User> updateUser(@PathVariable UUID id, @RequestBody User userData) {
-		User user = userService.updateUser(id, userData);
-		if (user == null) {
-	        return ResponseEntity.notFound().build();
-	    }
+    @GetMapping("/email/{email}")
+    public ResponseEntity<UserDTO> getUser(@PathVariable String email) {
+        UserDTO userDTO = userService.getUserByEmail(email);
+        return ResponseEntity.ok(userDTO);
+    }
 
-		return ResponseEntity.ok().body(user);
-	}
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable UUID id, @RequestBody UserDTO userDTO) {
+        UserDTO updatedUserDTO = userService.updateUser(id, userDTO);
+        return ResponseEntity.ok(updatedUserDTO);
+    }
     
-    @DeleteMapping(value = "/{id}")
-	public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
-		userService.deleteUserById(id);
-		return ResponseEntity.noContent().build();
-	}
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
+        userService.deleteUserById(id);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -1,13 +1,26 @@
 package com.kadu.RpgManager.dtos;
 
-public class UserDto {
-    
+import java.util.UUID;
+
+public class UserDTO {
+    private UUID id;
     private String name;
     private String email;
+    private String password;
     
-    public UserDto(String name, String email) {
+    public UserDTO( UUID id,String name, String email, String password) {
+        this.id = id;
         this.name = name;
         this.email = email;
+        this.password = password;
+    }
+    
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -25,4 +38,13 @@ public class UserDto {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
 }
