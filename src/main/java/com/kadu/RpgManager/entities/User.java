@@ -1,4 +1,4 @@
-package com.entities;
+package com.kadu.RpgManager.entities;
 
 import java.util.List;
 import java.util.UUID;
@@ -28,8 +28,7 @@ public class User {
 
     public User() {}
 
-    public User(UUID id, String name, String email, String password) {
-        this.id = id;
+    public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;

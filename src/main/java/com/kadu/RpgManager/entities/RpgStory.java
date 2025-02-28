@@ -1,4 +1,4 @@
-package com.entities;
+package com.kadu.RpgManager.entities;
 
 import java.util.UUID;
 
