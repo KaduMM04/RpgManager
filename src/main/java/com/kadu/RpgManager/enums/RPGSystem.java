@@ -1,6 +1,6 @@
 package com.kadu.RpgManager.enums;
 
 public enum RPGSystem {
-    DND_SE,
+    DND_5E,
     ORDEM_PARANORMAL
 }

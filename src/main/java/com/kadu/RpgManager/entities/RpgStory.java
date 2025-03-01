@@ -35,8 +35,7 @@ public class RpgStory {
     public RpgStory() {
     }
 
-    public RpgStory(UUID id, String title,RPGSystem system, String description, User user) {
-        this.id = id;
+    public RpgStory(String title, String description, RPGSystem system, User user) {
         this.title = title;
         this.description = description;
         this.system = system;
