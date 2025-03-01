@@ -2,7 +2,11 @@ package com.kadu.RpgManager.entities;
 
 import java.util.UUID;
 
+import com.kadu.RpgManager.enums.RPGSystem;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,6 +25,9 @@ public class RpgStory {
     private String title;
     private String description;
 
+    @Enumerated(EnumType.STRING)
+    private RPGSystem system;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -28,10 +35,11 @@ public class RpgStory {
     public RpgStory() {
     }
 
-    public RpgStory(UUID id, String title, String description, User user) {
+    public RpgStory(UUID id, String title,RPGSystem system, String description, User user) {
         this.id = id;
         this.title = title;
         this.description = description;
+        this.system = system;
         this.user = user;
     }
 
@@ -50,6 +58,14 @@ public class RpgStory {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    public RPGSystem getSystem() {
+         return system; 
+        }
+
+    public void setSystem(RPGSystem system) {
+         this.system = system; 
+        }
 
     public String getDescription() {
         return description;
