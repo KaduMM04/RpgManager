@@ -38,8 +38,12 @@ public class RpgStoryController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<RpgStoryDTO> getUserStories(@PathVariable UUID userId) {
-        return rpgStoryService.getUserStories(userId);
+    public ResponseEntity<List<RpgStoryDTO>> getUserStories(@PathVariable UUID userId) {
+        List<RpgStoryDTO> userStoryDtosList = rpgStoryService.getUserStories(userId);
+        if(userStoryDtosList.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(userStoryDtosList);
     }
     
 }
