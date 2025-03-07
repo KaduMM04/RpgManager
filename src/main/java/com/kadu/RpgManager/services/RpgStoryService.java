@@ -39,7 +39,7 @@ public class RpgStoryService {
     }
 
     public List<RpgStoryDTO> getUserStories(UUID userId) {
-        List<RpgStory> stories = rpgStoryRepository.findByUserId(userId); // CORRIGIDO
+        List<RpgStory> stories = rpgStoryRepository.findByUserId(userId); 
         return stories.stream()
             .map(this::convertToDTO)
             .collect(Collectors.toList());
